@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Plan de Trabajo">
+<meta name="application-name" content="Plan de Trabajo">
+<title>Plan de Trabajo — Liliana</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#0f0f13;--card:#1a1a22;--border:#2a2a38;--accent:#e8c97e;--accent2:#7eb8e8;--red:#e87e7e;--green:#7ee8a2;--text:#e8e8f0;--muted:#666677;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:100px;}
+
+header{background:linear-gradient(135deg,#1a1a22,#0f0f13);border-bottom:1px solid var(--border);padding:24px 20px 14px;position:sticky;top:0;z-index:100;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.logo{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+h1{font-family:'DM Serif Display',serif;font-size:22px;}
+h1 span{color:var(--accent);}
+.global-pct{font-size:26px;font-weight:700;color:var(--accent);text-align:right;}
+.global-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:right;}
+.bar-wrap{background:var(--border);border-radius:100px;height:4px;overflow:hidden;margin-top:8px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .4s ease;}
+
+.tabs{display:flex;gap:8px;padding:12px 20px 0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#0f0f13;font-weight:700;}
+
+.content{padding:16px 20px;}
+.day-block{display:none;}
+.day-block.active{display:block;}
+
+/* Upload */
+.upload-zone{background:var(--card);border:2px dashed var(--accent);border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:16px;cursor:pointer;transition:all .2s;}
+.upload-zone:hover,.upload-zone.drag{background:rgba(232,201,126,.06);}
+.upload-icon{font-size:32px;margin-bottom:8px;}
+.upload-title{font-size:14px;font-weight:600;color:var(--accent);margin-bottom:4px;}
+.upload-sub{font-size:12px;color:var(--muted);line-height:1.5;}
+#fileInput{display:none;}
+
+.success-banner{background:rgba(126,232,162,.1);border:1px solid rgba(126,232,162,.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--green);display:none;}
+.error-banner{background:rgba(232,126,126,.1);border:1px solid rgba(232,126,126,.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--red);display:none;}
+
+.day-header{margin-bottom:14px;}
+.day-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.day-title{font-family:'DM Serif Display',serif;font-size:20px;}
+
+.empresa-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;}
+.empresa-head{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.empresa-head:active{background:rgba(255,255,255,.03);}
+.empresa-name{font-weight:600;font-size:14px;}
+.empresa-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.empresa-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;white-space:nowrap;}
+.accordion-arrow{font-size:11px;color:var(--muted);transition:transform .25s;margin-left:8px;flex-shrink:0;}
+.empresa-card.collapsed .accordion-arrow{transform:rotate(-90deg);}
+.empresa-card.collapsed .task-list,.empresa-card.collapsed .empresa-foot{display:none;}
+
+.task-list{padding:2px 0;}
+.section-sep{padding:6px 16px 2px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border);margin-top:4px;}
+.task-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.03);user-select:none;}
+.task-item:active{background:rgba(255,255,255,.05);}
+.check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;position:relative;transition:all .2s;}
+.check::after{content:'';position:absolute;top:3px;left:6px;width:6px;height:9px;border:2.5px solid #0f0f13;border-top:none;border-left:none;transform:rotate(45deg);opacity:0;transition:opacity .15s;}
+.task-info{flex:1;min-width:0;}
+.task-text{font-size:13px;line-height:1.4;transition:all .25s;}
+.task-time{font-size:10px;color:var(--muted);margin-top:2px;}
+.time-chip{background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;font-size:10px;}
+.task-item.done .check{background:var(--green);border-color:var(--green);}
+.task-item.done .check::after{opacity:1;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted);}
+
+.empresa-foot{display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(0,0,0,.2);border-top:1px solid var(--border);}
+.foot-bar{flex:1;height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
+.foot-fill{height:100%;border-radius:100px;transition:width .35s ease;}
+.foot-text{font-size:11px;color:var(--muted);white-space:nowrap;}
+
+.c-telbros{border-left:3px solid #e87e7e;}.n-telbros{color:#e87e7e;}.b-telbros{background:rgba(232,126,126,.12);color:#e87e7e;}
+.c-innovamat{border-left:3px solid #e8c97e;}.n-innovamat{color:#e8c97e;}.b-innovamat{background:rgba(232,201,126,.12);color:#e8c97e;}
+.c-fiberus{border-left:3px solid #c47ee8;}.n-fiberus{color:#c47ee8;}.b-fiberus{background:rgba(196,126,232,.12);color:#c47ee8;}
+.c-techbiz{border-left:3px solid #7eb8e8;}.n-techbiz{color:#7eb8e8;}.b-techbiz{background:rgba(126,184,232,.12);color:#7eb8e8;}
+.c-new{border-left:3px solid #7ee8a2;}.n-new{color:#7ee8a2;}.b-new{background:rgba(126,232,162,.12);color:#7ee8a2;}
+
+.celebrate{display:none;text-align:center;padding:32px 20px;}
+.celebrate.show{display:block;animation:fadeUp .5s ease;}
+.cel-emoji{font-size:48px;margin-bottom:10px;}
+.cel-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--green);margin-bottom:6px;}
+.cel-sub{font-size:13px;color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div><div class="logo">Plan de Trabajo</div><h1>Cierres <span>Liliana</span></h1></div>
+    <div><div class="global-label">Avance</div><div class="global-pct" id="globalPct">0%</div></div>
+  </div>
+  <div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div>
+</header>
+
+<div class="tabs" id="tabsContainer"></div>
+
+<div class="content" id="mainContent">
+  <div class="upload-zone" id="uploadZone"
+       onclick="document.getElementById('fileInput').click()"
+       ondragover="event.preventDefault();this.classList.add('drag')"
+       ondragleave="this.classList.remove('drag')"
+       ondrop="handleDrop(event)">
+    <div class="upload-icon">📊</div>
+    <div class="upload-title">Subir plantilla Excel</div>
+    <div class="upload-sub">Toca para seleccionar tu archivo .xlsx<br>Agrega empresas, días y tareas masivamente</div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(event)">
+  </div>
+  <div class="success-banner" id="successBanner"></div>
+  <div class="error-banner" id="errorBanner"></div>
+  <div id="daysContainer"></div>
+  <div class="celebrate" id="celebrate">
+    <div class="cel-emoji">🎉</div>
+    <div class="cel-title">¡Lo lograste, Liliana!</div>
+    <div class="cel-sub">Todos los cierres completados.<br>¡Excelente trabajo!</div>
+  </div>
+</div>
+
+<script>
+const SK = 'plan-trabajo-v4';
+
+const BASE_DATA = {
+  'Mié 03':{title:'TELBROS — Día 1',empresas:[{nombre:'TELBROS',color:'telbros',vence:'Vence 05 Jun',meta:'08:00–17:00',tareas:[
+    {text:'Reverso de Facturas por Recibir',ini:'08:00',fin:'08:40'},
+    {text:'Registro de compras',ini:'08:40',fin:'09:20'},
+    {text:'Registro de ventas',ini:'09:20',fin:'10:00'},
+    {text:'Registro de Bancos en CLP',ini:'10:00',fin:'10:40'},
+    {text:'Dif. Cambio Bancos',ini:'10:40',fin:'11:20'},
+    {text:'Dif. Cambio Proveedores extranjero',ini:'11:20',fin:'12:00'},
+    {text:'Registro facturas por recibir',ini:'13:00',fin:'13:40'},
+    {text:'Centralización de remuneraciones',ini:'13:40',fin:'14:20'},
+    {text:'Boletas de honorarios',ini:'14:20',fin:'15:00'},
+    {text:'Facturas extranjeras ISP Cube',ini:'15:00',fin:'15:40'},
+    {text:'Dif. cambio préstamos USD/EUR',ini:'15:40',fin:'16:20'},
+    {text:'Rendiciones TDC CLP/USD',ini:'16:20',fin:'17:00'},
+  ]}]},
+  'Jue 04':{title:'TELBROS fin + INNOVAMAT',empresas:[
+    {nombre:'TELBROS',color:'telbros',vence:'Vence 05 Jun',meta:'08:00–15:00',tareas:[
+      {text:'Depreciación AF',ini:'08:00',fin:'09:00'},
+      {text:'Finiquitos por pagar',ini:'09:00',fin:'10:00'},
+      {text:'Cuadratura de cuentas contables',ini:'10:00',fin:'11:30'},
+      {text:'Cuadratura de empresas relacionadas',ini:'11:30',fin:'13:00'},
+      {text:'Solicitud carpetas DIN',ini:'13:00',fin:'13:30'},
+      {text:'Registro Prov. F29 (Ajuste IVA)',ini:'13:30',fin:'14:30'},
+      {text:'✅ Revisión final y entrega TELBROS',ini:'14:30',fin:'15:00'},
+    ]},
+    {nombre:'INNOVAMAT',color:'innovamat',vence:'Vence 05 Jun',meta:'15:00–17:00',tareas:[
+      {text:'Reverso de Facturas por Recibir',ini:'15:00',fin:'15:15'},
+      {text:'Registro de compras',ini:'15:15',fin:'15:25'},
+      {text:'Registro de ventas',ini:'15:25',fin:'15:35'},
+      {text:'Registro de Bancos en CLP',ini:'15:35',fin:'15:50'},
+      {text:'Centralización de remuneraciones',ini:'15:50',fin:'16:05'},
+      {text:'Boletas de honorarios',ini:'16:05',fin:'16:15'},
+      {text:'Depreciación AF',ini:'16:15',fin:'16:25'},
+      {text:'Cuadratura de cuentas contables',ini:'16:25',fin:'16:40'},
+      {text:'Registro Prov. F29 (Ajuste IVA)',ini:'16:40',fin:'16:50'},
+      {text:'✅ Revisión final y entrega INNOVAMAT',ini:'16:50',fin:'17:00'},
+    ]}
+  ]},
+  'Vie 05':{title:'FIBERUS — Día 1',empresas:[{nombre:'FIBERUS NETWORK SPA',color:'fiberus',vence:'Vence 10 Jun',meta:'08:00–14:00',tareas:[
+    {text:'Reverso de Facturas por Recibir',ini:'08:00',fin:'08:40'},
+    {text:'Registro de compras',ini:'08:40',fin:'09:20'},
+    {text:'Registro de ventas',ini:'09:20',fin:'10:00'},
+    {text:'Registro de Bancos en CLP',ini:'10:00',fin:'10:40'},
+    {text:'Registro de Bancos en USD (si aplica)',ini:'10:40',fin:'11:10'},
+    {text:'Registro de Bancos en EUR (si aplica)',ini:'11:10',fin:'11:40'},
+    {text:'Dif. Cambio Bancos',ini:'11:40',fin:'12:20'},
+    {text:'Dif. Cambio Proveedores extranjero',ini:'13:00',fin:'13:40'},
+    {text:'Registro facturas por recibir',ini:'13:40',fin:'14:00'},
+  ]}]},
+  'Lun 08':{title:'FIBERUS fin + TECH FOR BIZ',empresas:[
+    {nombre:'FIBERUS NETWORK SPA',color:'fiberus',vence:'Vence 10 Jun',meta:'08:00–11:00',tareas:[
+      {text:'Centralización de remuneraciones',ini:'08:00',fin:'08:40'},
+      {text:'Boletas de honorarios',ini:'08:40',fin:'09:10'},
+      {text:'Depreciación AF',ini:'09:10',fin:'09:40'},
+      {text:'Finiquitos por pagar',ini:'09:40',fin:'10:10'},
+      {text:'Cuadratura de cuentas contables',ini:'10:10',fin:'10:40'},
+      {text:'✅ DIN + F29 + Entrega FIBERUS',ini:'10:40',fin:'11:00'},
+    ]},
+    {nombre:'TECHNOLOGY FOR BUSINESS',color:'techbiz',vence:'Vence 10 Jun',meta:'11:00–17:00',tareas:[
+      {text:'Reverso de Facturas por Recibir',ini:'11:00',fin:'11:40'},
+      {text:'Registro de compras',ini:'11:40',fin:'12:20'},
+      {text:'Registro de ventas',ini:'13:00',fin:'13:40'},
+      {text:'Registro de Bancos en CLP',ini:'13:40',fin:'14:20'},
+      {text:'Dif. Cambio Bancos',ini:'14:20',fin:'15:00'},
+      {text:'Dif. Cambio Proveedores extranjero',ini:'15:00',fin:'15:40'},
+      {text:'Registro facturas por recibir',ini:'15:40',fin:'16:20'},
+      {text:'Centralización de remuneraciones',ini:'16:20',fin:'17:00'},
+    ]}
+  ]},
+  'Mar 09':{title:'TECH FOR BIZ — Cierre final',empresas:[{nombre:'TECHNOLOGY FOR BUSINESS',color:'techbiz',vence:'Vence 10 Jun',meta:'08:00–13:00',tareas:[
+    {text:'Boletas de honorarios',ini:'08:00',fin:'08:30'},
+    {text:'Facturas extranjeras ISP Cube',ini:'08:30',fin:'09:10'},
+    {text:'Dif. cambio préstamos USD/EUR',ini:'09:10',fin:'09:50'},
+    {text:'Depreciación AF',ini:'09:50',fin:'10:20'},
+    {text:'Finiquitos por pagar',ini:'10:20',fin:'10:50'},
+    {text:'Cuadratura de cuentas contables',ini:'10:50',fin:'11:30'},
+    {text:'Cuadratura de empresas relacionadas',ini:'11:30',fin:'12:10'},
+    {text:'Solicitud carpetas DIN',ini:'12:10',fin:'12:30'},
+    {text:'Registro Prov. F29 (Ajuste IVA)',ini:'12:30',fin:'12:50'},
+    {text:'✅ Revisión final y entrega',ini:'12:50',fin:'13:00'},
+  ]}]}
+};
+
+let state = {}, days = {};
+
+function loadStorage() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SK)||'{}');
+    state = saved.state||{};
+    const extra = saved.extra||{};
+    days = JSON.parse(JSON.stringify(BASE_DATA));
+    for(const [day,data] of Object.entries(extra)){
+      if(!days[day]) days[day]={title:day,empresas:[]};
+      for(const emp of data.empresas){
+        const ex=days[day].empresas.find(e=>e.nombre===emp.nombre);
+        if(ex){ emp.tareas.forEach(t=>{ if(!ex.tareas.find(et=>et.text===t.text)) ex.tareas.push(t); }); }
+        else days[day].empresas.push(emp);
+      }
+    }
+  } catch(e){ days=JSON.parse(JSON.stringify(BASE_DATA)); }
+}
+
+function saveStorage() {
+  const extra={};
+  for(const [day,data] of Object.entries(days)){
+    if(!BASE_DATA[day]){ extra[day]=data; continue; }
+    const extraEmps=[];
+    for(const emp of data.empresas){
+      const baseEmp=BASE_DATA[day].empresas.find(e=>e.nombre===emp.nombre);
+      if(!baseEmp){ extraEmps.push(emp); continue; }
+      const extraT=emp.tareas.filter(t=>!baseEmp.tareas.find(bt=>bt.text===t.text));
+      if(extraT.length) extraEmps.push({...emp,tareas:extraT});
+    }
+    if(extraEmps.length) extra[day]={title:data.title,empresas:extraEmps};
+  }
+  try{ localStorage.setItem(SK,JSON.stringify({state,extra})); }catch(e){}
+}
+
+function taskId(day,emp,text){ return `${day}||${emp}||${text}`; }
+
+function colorClass(nombre){
+  const map={'TELBROS':'telbros','INNOVAMAT':'innovamat','FIBERUS NETWORK SPA':'fiberus','TECHNOLOGY FOR BUSINESS':'techbiz'};
+  return map[nombre]||'new';
+}
+
+function toggleCard(cardId){
+  const card=document.getElementById(cardId);
+  const c=card.classList.toggle('collapsed');
+  state['collapsed-'+cardId]=c;
+  saveStorage();
+}
+
+function toggle(el){
+  const tid=decodeURIComponent(el.dataset.tid);
+  state[tid]=!state[tid];
+  saveStorage();
+  const parts=tid.split('||');
+  renderAll();
+  showDay('d-'+parts[0]);
+}
+
+function showDay(dayId){
+  document.querySelectorAll('.day-block').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const block=document.getElementById(dayId);
+  if(block) block.classList.add('active');
+  const idx=Object.keys(days).indexOf(dayId.replace('d-',''));
+  const tabs=document.querySelectorAll('.tab');
+  if(tabs[idx]) tabs[idx].classList.add('active');
+}
+
+function updateGlobal(){
+  let total=0,done=0;
+  for(const [day,data] of Object.entries(days))
+    for(const emp of data.empresas){
+      total+=emp.tareas.length;
+      done+=emp.tareas.filter(t=>state[taskId(day,emp.nombre,t.text)]).length;
+    }
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('globalPct').textContent=pct+'%';
+  document.getElementById('globalBar').style.width=pct+'%';
+}
+
+function renderAll(){
+  // Tabs
+  const tc=document.getElementById('tabsContainer');
+  const activeDay=document.querySelector('.day-block.active')?.id?.replace('d-','')||Object.keys(days)[0];
+  tc.innerHTML='';
+  Object.keys(days).forEach((day,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab'+(day===activeDay?' active':'');
+    btn.textContent=day;
+    btn.onclick=()=>showDay('d-'+day);
+    tc.appendChild(btn);
+  });
+
+  // Days
+  const dc=document.getElementById('daysContainer');
+  dc.innerHTML='';
+  Object.entries(days).forEach(([day,data],i)=>{
+    const block=document.createElement('div');
+    block.className='day-block'+(day===activeDay?' active':'');
+    block.id='d-'+day;
+
+    let html=`<div class="day-header"><div class="day-date">${day}</div><div class="day-title">${data.title}</div></div>`;
+
+    data.empresas.forEach(emp=>{
+      const color=colorClass(emp.nombre);
+      const cardId=('card-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
+      const fillId=('fill-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
+      const textId=('text-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
+      const pending=emp.tareas.filter(t=>!state[taskId(day,emp.nombre,t.text)]);
+      const done=emp.tareas.filter(t=>state[taskId(day,emp.nombre,t.text)]);
+      const total=emp.tareas.length;
+      const doneCount=done.length;
+      const pct=total?Math.round(doneCount/total*100):0;
+      const collapsed=state['collapsed-'+cardId]?'collapsed':'';
+
+      html+=`<div class="empresa-card ${collapsed}" id="${cardId}">
+        <div class="empresa-head c-${color}" onclick="toggleCard('${cardId}')">
+          <div><div class="empresa-name n-${color}">${emp.nombre}</div><div class="empresa-meta">${emp.meta||''} · ${doneCount}/${total}</div></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            ${emp.vence?`<span class="empresa-badge b-${color}">${emp.vence}</span>`:''}
+            <span class="accordion-arrow">▼</span>
+          </div>
+        </div>
+        <div class="task-list" id="list-${cardId}">`;
+
+      pending.forEach(t=>{
+        const tid=taskId(day,emp.nombre,t.text);
+        html+=`<div class="task-item" data-tid="${encodeURIComponent(tid)}" onclick="toggle(this)">
+          <div class="check"></div>
+          <div class="task-info"><div class="task-text">${t.text}</div>
+          ${t.ini&&t.fin?`<div class="task-time"><span class="time-chip">${t.ini} – ${t.fin}</span></div>`:''}</div>
+        </div>`;
+      });
+
+      if(done.length){
+        html+=`<div class="section-sep">✓ Completadas</div>`;
+        done.forEach(t=>{
+          const tid=taskId(day,emp.nombre,t.text);
+          html+=`<div class="task-item done" data-tid="${encodeURIComponent(tid)}" onclick="toggle(this)">
+            <div class="check"></div>
+            <div class="task-info"><div class="task-text">${t.text}</div>
+            ${t.ini&&t.fin?`<div class="task-time"><span class="time-chip">${t.ini} – ${t.fin}</span></div>`:''}</div>
+          </div>`;
+        });
+      }
+
+      html+=`</div>
+        <div class="empresa-foot">
+          <div class="foot-bar"><div class="foot-fill" id="${fillId}" style="background:${color==='new'?'var(--green)':'var(--'+color+')'};width:${pct}%"></div></div>
+          <div class="foot-text" id="${textId}">${doneCount} / ${total}</div>
+        </div></div>`;
+    });
+
+    block.innerHTML=html;
+    dc.appendChild(block);
+  });
+
+  updateGlobal();
+}
+
+// ── Excel Upload ──
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if(file) processExcel(file);
+}
+
+function handleFile(e){
+  const file=e.target.files[0];
+  if(file) processExcel(file);
+  e.target.value='';
+}
+
+function showBanner(msg, isError=false){
+  const b=document.getElementById(isError?'errorBanner':'successBanner');
+  const b2=document.getElementById(isError?'successBanner':'errorBanner');
+  b2.style.display='none';
+  b.textContent=msg;
+  b.style.display='block';
+  setTimeout(()=>b.style.display='none', 6000);
+}
+
+function processExcel(file){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+
+      // Find header row
+      let startRow=-1;
+      for(let i=0;i<rows.length;i++){
+        const r=rows[i].map(c=>String(c).toUpperCase().trim());
+        if(r.some(c=>c.includes('EMPRESA'))&&r.some(c=>c.includes('TAREA'))){startRow=i+1;break;}
+      }
+      if(startRow<0){showBanner('No se encontró la cabecera EMPRESA y TAREA en el archivo.',true);return;}
+
+      const header=rows[startRow-1].map(c=>String(c).toUpperCase().trim());
+      const iEmpresa=header.findIndex(h=>h.includes('EMPRESA'));
+      const iDia=header.findIndex(h=>h.includes('D')&&(h.includes('A')||h.includes('Í')||h.includes('I')));
+      const iTarea=header.findIndex(h=>h.includes('TAREA'));
+      const iIni=header.findIndex(h=>h.includes('INICIO')||h.includes('INI'));
+      const iFin=header.findIndex(h=>h.includes('FIN'));
+
+      let added=0,skipped=0;
+      for(let i=startRow;i<rows.length;i++){
+        const row=rows[i];
+        const empresa=String(row[iEmpresa]||'').trim();
+        const dia=String(row[iDia]||'').trim();
+        const tarea=String(row[iTarea]||'').trim();
+        if(!empresa||!dia||!tarea){if(empresa||dia||tarea)skipped++;continue;}
+        const ini=iIni>=0?String(row[iIni]||'').trim():'';
+        const fin=iFin>=0?String(row[iFin]||'').trim():'';
+
+        if(!days[dia]) days[dia]={title:dia,empresas:[]};
+        let emp=days[dia].empresas.find(e=>e.nombre===empresa);
+        if(!emp){
+          emp={nombre:empresa,color:colorClass(empresa),vence:'',meta:'',tareas:[]};
+          days[dia].empresas.push(emp);
+        }
+        if(!emp.tareas.find(t=>t.text===tarea)){emp.tareas.push({text:tarea,ini,fin});added++;}
+        else skipped++;
+      }
+
+      saveStorage();
+      renderAll();
+      showBanner(`✅ ${added} tareas agregadas${skipped?` · ${skipped} omitidas`:''}.`);
+    }catch(err){
+      showBanner('Error al leer el archivo. Usa la plantilla provista.',true);
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+loadStorage();
+renderAll();
+</script>
+</body>
+</html>
