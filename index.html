@@ -6,7 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Plan de Trabajo">
-<meta name="application-name" content="Plan de Trabajo">
 <title>Plan de Trabajo — Liliana</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -15,81 +14,122 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:100px;}
 
-header{background:linear-gradient(135deg,#1a1a22,#0f0f13);border-bottom:1px solid var(--border);padding:24px 20px 14px;position:sticky;top:0;z-index:100;}
-.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-.logo{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
-h1{font-family:'DM Serif Display',serif;font-size:22px;}
+header{background:linear-gradient(135deg,#1a1a22,#0f0f13);border-bottom:1px solid var(--border);padding:18px 20px 12px;position:sticky;top:0;z-index:100;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.logo{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+h1{font-family:'DM Serif Display',serif;font-size:20px;}
 h1 span{color:var(--accent);}
-.global-pct{font-size:26px;font-weight:700;color:var(--accent);text-align:right;}
+.global-pct{font-size:24px;font-weight:700;color:var(--accent);text-align:right;}
 .global-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:right;}
-.bar-wrap{background:var(--border);border-radius:100px;height:4px;overflow:hidden;margin-top:8px;}
-.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .4s ease;}
+.bar-wrap{background:var(--border);border-radius:100px;height:4px;overflow:hidden;margin-top:6px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .5s ease;}
 
-.tabs{display:flex;gap:8px;padding:12px 20px 0;overflow-x:auto;scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{flex-shrink:0;padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;}
-.tab.active{background:var(--accent);border-color:var(--accent);color:#0f0f13;font-weight:700;}
+/* Nav tabs */
+.nav-tabs{display:flex;border-bottom:1px solid var(--border);background:#0f0f13;}
+.nav-tab{flex:1;padding:11px 4px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 
-.content{padding:16px 20px;}
-.day-block{display:none;}
-.day-block.active{display:block;}
+/* Selectores */
+.selectors{display:flex;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);background:#0f0f13;}
+.selector-wrap{flex:1;}
+.selector-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+select{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;appearance:none;-webkit-appearance:none;cursor:pointer;}
+select:focus{outline:none;border-color:var(--accent);}
 
-/* Upload */
-.upload-zone{background:var(--card);border:2px dashed var(--accent);border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:16px;cursor:pointer;transition:all .2s;}
-.upload-zone:hover,.upload-zone.drag{background:rgba(232,201,126,.06);}
-.upload-icon{font-size:32px;margin-bottom:8px;}
-.upload-title{font-size:14px;font-weight:600;color:var(--accent);margin-bottom:4px;}
-.upload-sub{font-size:12px;color:var(--muted);line-height:1.5;}
+.content{padding:14px 20px;}
+.page{display:none;}.page.active{display:block;}
+
+/* Acciones */
+.actions{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.action-btn{flex:1;min-width:80px;padding:9px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;}
+.action-btn.primary{background:rgba(232,201,126,.1);border-color:rgba(232,201,126,.3);color:var(--accent);}
+.action-btn.blue{background:rgba(126,184,232,.1);border-color:rgba(126,184,232,.3);color:var(--accent2);}
+.action-btn.green{background:rgba(126,232,162,.1);border-color:rgba(126,232,162,.3);color:var(--green);}
+
+.banner{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;display:none;}
+.banner.success{background:rgba(126,232,162,.1);border:1px solid rgba(126,232,162,.3);color:var(--green);}
+.banner.error{background:rgba(232,126,126,.1);border:1px solid rgba(232,126,126,.3);color:var(--red);}
 #fileInput{display:none;}
 
-.success-banner{background:rgba(126,232,162,.1);border:1px solid rgba(126,232,162,.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--green);display:none;}
-.error-banner{background:rgba(232,126,126,.1);border:1px solid rgba(232,126,126,.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--red);display:none;}
+/* Context card */
+.context-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.context-empresa{font-weight:700;font-size:15px;}
+.context-mes{font-size:12px;color:var(--muted);margin-top:2px;}
+.context-pct{font-size:22px;font-weight:700;color:var(--accent);}
+.context-sub{font-size:10px;color:var(--muted);text-align:right;}
 
-.day-header{margin-bottom:14px;}
-.day-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
-.day-title{font-family:'DM Serif Display',serif;font-size:20px;}
+/* Dashboard cards */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;}
+.dash-card.full{grid-column:1/-1;}
+.dash-val{font-size:28px;font-weight:700;color:var(--accent);font-family:'DM Serif Display',serif;}
+.dash-label{font-size:11px;color:var(--muted);margin-top:2px;}
+.dash-sub{font-size:12px;color:var(--text);margin-top:6px;}
 
-.empresa-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;}
-.empresa-head{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
-.empresa-head:active{background:rgba(255,255,255,.03);}
-.empresa-name{font-weight:600;font-size:14px;}
-.empresa-meta{font-size:11px;color:var(--muted);margin-top:2px;}
-.empresa-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;white-space:nowrap;}
-.accordion-arrow{font-size:11px;color:var(--muted);transition:transform .25s;margin-left:8px;flex-shrink:0;}
-.empresa-card.collapsed .accordion-arrow{transform:rotate(-90deg);}
-.empresa-card.collapsed .task-list,.empresa-card.collapsed .empresa-foot{display:none;}
+.emp-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.emp-row:last-child{border-bottom:none;}
+.emp-name{flex:1;font-size:12px;font-weight:500;}
+.emp-pct-txt{font-size:11px;color:var(--accent);font-weight:700;min-width:32px;text-align:right;}
+.mini-bar{flex:2;height:4px;background:var(--border);border-radius:100px;overflow:hidden;}
+.mini-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;}
 
-.task-list{padding:2px 0;}
-.section-sep{padding:6px 16px 2px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border);margin-top:4px;}
-.task-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.03);user-select:none;}
-.task-item:active{background:rgba(255,255,255,.05);}
-.check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;position:relative;transition:all .2s;}
-.check::after{content:'';position:absolute;top:3px;left:6px;width:6px;height:9px;border:2.5px solid #0f0f13;border-top:none;border-left:none;transform:rotate(45deg);opacity:0;transition:opacity .15s;}
-.task-info{flex:1;min-width:0;}
-.task-text{font-size:13px;line-height:1.4;transition:all .25s;}
-.task-time{font-size:10px;color:var(--muted);margin-top:2px;}
-.time-chip{background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;font-size:10px;}
+/* Tasks */
+.tasks-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px 16px;margin-bottom:12px;}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.task-item:last-child{border-bottom:none;}
+.task-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;}
+.check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;position:relative;transition:all .2s;margin-top:1px;}
+.check::after{content:'';position:absolute;top:3px;left:6px;width:5px;height:8px;border:2px solid #0f0f13;border-top:none;border-left:none;transform:rotate(45deg);opacity:0;transition:opacity .15s;}
+.task-text{font-size:13px;line-height:1.4;}
 .task-item.done .check{background:var(--green);border-color:var(--green);}
 .task-item.done .check::after{opacity:1;}
 .task-item.done .task-text{text-decoration:line-through;color:var(--muted);}
+.section-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:8px 0 4px;border-top:1px solid var(--border);margin-top:2px;}
 
-.empresa-foot{display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(0,0,0,.2);border-top:1px solid var(--border);}
-.foot-bar{flex:1;height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
-.foot-fill{height:100%;border-radius:100px;transition:width .35s ease;}
-.foot-text{font-size:11px;color:var(--muted);white-space:nowrap;}
+/* Cronómetro */
+.timer-col{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.timer-display{font-size:11px;font-weight:600;font-family:monospace;min-width:44px;text-align:right;color:var(--muted);}
+.timer-display.running{color:var(--green);}
+.timer-display.finished{color:var(--accent2);}
+.timer-btn{font-size:12px;padding:4px 9px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;}
+.timer-btn.start{background:rgba(126,232,162,.15);color:var(--green);}
+.timer-btn.stop{background:rgba(232,126,126,.15);color:var(--red);}
 
-.c-telbros{border-left:3px solid #e87e7e;}.n-telbros{color:#e87e7e;}.b-telbros{background:rgba(232,126,126,.12);color:#e87e7e;}
-.c-innovamat{border-left:3px solid #e8c97e;}.n-innovamat{color:#e8c97e;}.b-innovamat{background:rgba(232,201,126,.12);color:#e8c97e;}
-.c-fiberus{border-left:3px solid #c47ee8;}.n-fiberus{color:#c47ee8;}.b-fiberus{background:rgba(196,126,232,.12);color:#c47ee8;}
-.c-techbiz{border-left:3px solid #7eb8e8;}.n-techbiz{color:#7eb8e8;}.b-techbiz{background:rgba(126,184,232,.12);color:#7eb8e8;}
-.c-new{border-left:3px solid #7ee8a2;}.n-new{color:#7ee8a2;}.b-new{background:rgba(126,232,162,.12);color:#7ee8a2;}
+/* Solicitudes */
+.sol-form{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.sol-form-title{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;}
+.form-row{display:flex;gap:8px;margin-bottom:8px;}
+.form-input{flex:1;background:#0f0f13;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 10px;}
+.form-input:focus{outline:none;border-color:var(--accent);}
+.form-select{background:#0f0f13;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 10px;appearance:none;}
+.btn-submit{width:100%;padding:11px;background:var(--accent);border:none;border-radius:10px;color:#0f0f13;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;}
 
-.celebrate{display:none;text-align:center;padding:32px 20px;}
-.celebrate.show{display:block;animation:fadeUp .5s ease;}
-.cel-emoji{font-size:48px;margin-bottom:10px;}
-.cel-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--green);margin-bottom:6px;}
-.cel-sub{font-size:13px;color:var(--muted);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.sol-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.sol-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.sol-titulo{font-size:13px;font-weight:600;flex:1;}
+.sol-badges{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;}
+.badge-alta{background:rgba(232,126,126,.15);color:var(--red);}
+.badge-media{background:rgba(232,201,126,.15);color:var(--accent);}
+.badge-baja{background:rgba(126,232,162,.15);color:var(--green);}
+.badge-cliente{background:rgba(126,184,232,.12);color:var(--accent2);}
+.badge-jefatura{background:rgba(196,126,232,.12);color:#c47ee8;}
+.badge-correccion{background:rgba(232,201,126,.12);color:var(--accent);}
+.badge-otro{background:rgba(255,255,255,.08);color:var(--muted);}
+.sol-desc{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.4;}
+.sol-footer{display:flex;justify-content:space-between;align-items:center;}
+.sol-estado{font-size:11px;color:var(--muted);}
+.sol-actions{display:flex;gap:6px;}
+.sol-btn{font-size:11px;padding:3px 10px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;}
+.sol-btn.resolver{background:rgba(126,232,162,.15);color:var(--green);}
+.sol-btn.proceso{background:rgba(126,184,232,.15);color:var(--accent2);}
+.sol-btn.eliminar{background:rgba(232,126,126,.1);color:var(--red);}
+.sol-resuelto{opacity:.5;}
+
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted);}
+.empty-icon{font-size:36px;margin-bottom:8px;}
+.empty-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.empty-sub{font-size:12px;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -97,303 +137,570 @@ h1 span{color:var(--accent);}
 <header>
   <div class="header-top">
     <div><div class="logo">Plan de Trabajo</div><h1>Cierres <span>Liliana</span></h1></div>
-    <div><div class="global-label">Avance</div><div class="global-pct" id="globalPct">0%</div></div>
+    <div><div class="global-label" id="globalLabel">Avance global</div><div class="global-pct" id="globalPct">0%</div></div>
   </div>
   <div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div>
 </header>
 
-<div class="tabs" id="tabsContainer"></div>
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showPage('dashboard')">📊 Inicio</div>
+  <div class="nav-tab" onclick="showPage('cierres')">📋 Cierres</div>
+  <div class="nav-tab" onclick="showPage('solicitudes')">🔔 Solicitudes</div>
+</div>
 
-<div class="content" id="mainContent">
-  <div class="upload-zone" id="uploadZone"
-       onclick="document.getElementById('fileInput').click()"
-       ondragover="event.preventDefault();this.classList.add('drag')"
-       ondragleave="this.classList.remove('drag')"
-       ondrop="handleDrop(event)">
-    <div class="upload-icon">📊</div>
-    <div class="upload-title">Subir plantilla Excel</div>
-    <div class="upload-sub">Toca para seleccionar tu archivo .xlsx<br>Agrega empresas, días y tareas masivamente</div>
-    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(event)">
+<!-- Selectores solo en Cierres -->
+<div class="selectors" id="selectorsBar" style="display:none;">
+  <div class="selector-wrap">
+    <div class="selector-label">Empresa</div>
+    <select id="selEmpresa" onchange="onSelectChange()">
+      <option value="">— Selecciona —</option>
+    </select>
   </div>
-  <div class="success-banner" id="successBanner"></div>
-  <div class="error-banner" id="errorBanner"></div>
-  <div id="daysContainer"></div>
-  <div class="celebrate" id="celebrate">
-    <div class="cel-emoji">🎉</div>
-    <div class="cel-title">¡Lo lograste, Liliana!</div>
-    <div class="cel-sub">Todos los cierres completados.<br>¡Excelente trabajo!</div>
+  <div class="selector-wrap">
+    <div class="selector-label">Mes</div>
+    <select id="selMes" onchange="onSelectChange()">
+      <option value="">— Selecciona —</option>
+      <option>Enero</option><option>Febrero</option><option>Marzo</option>
+      <option>Abril</option><option>Mayo</option><option>Junio</option>
+      <option>Julio</option><option>Agosto</option><option>Septiembre</option>
+      <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+    </select>
+  </div>
+</div>
+
+<div class="content">
+  <div class="banner success" id="successBanner"></div>
+  <div class="banner error" id="errorBanner"></div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="dash-grid" id="dashGrid"></div>
+  </div>
+
+  <!-- ═══ CIERRES ═══ -->
+  <div class="page" id="page-cierres">
+    <div class="actions">
+      <button class="action-btn primary" onclick="document.getElementById('fileInput').click()">📊 Excel</button>
+      <button class="action-btn blue" onclick="exportarExcel()">📥 Exportar</button>
+      <button class="action-btn" onclick="agregarEmpresa()">＋ Empresa</button>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(event)">
+    </div>
+    <div id="cierresView"></div>
+  </div>
+
+  <!-- ═══ SOLICITUDES ═══ -->
+  <div class="page" id="page-solicitudes">
+    <div class="sol-form">
+      <div class="sol-form-title">＋ Nueva solicitud</div>
+      <input class="form-input" id="solTitulo" placeholder="Descripción de la solicitud..." style="width:100%;margin-bottom:8px;">
+      <div class="form-row">
+        <select class="form-select" id="solTipo">
+          <option value="cliente">👤 Cliente</option>
+          <option value="jefatura">👔 Jefatura</option>
+          <option value="correccion">✏️ Corrección asiento</option>
+          <option value="otro">📌 Otro</option>
+        </select>
+        <select class="form-select" id="solUrgencia">
+          <option value="alta">🔴 Alta</option>
+          <option value="media">🟡 Media</option>
+          <option value="baja">🟢 Baja</option>
+        </select>
+        <input class="form-input" id="solEmpresaSol" placeholder="Empresa (opcional)" style="flex:1.5;">
+      </div>
+      <button class="btn-submit" onclick="agregarSolicitud()">Registrar solicitud</button>
+    </div>
+    <div id="solicitudesView"></div>
   </div>
 </div>
 
 <script>
-const SK = 'plan-trabajo-v4';
+const SK='plan-v7';
+const TAREAS_BASE=[
+  {text:'Reverso de Facturas por Recibir',etapa:'Apertura'},
+  {text:'Registro de compras',etapa:'Ingresos'},
+  {text:'Registro de ventas',etapa:'Ingresos'},
+  {text:'Centralización de remuneraciones',etapa:'Remuneraciones'},
+  {text:'Boletas de honorarios',etapa:'Remuneraciones'},
+  {text:'Finiquitos por pagar',etapa:'Remuneraciones'},
+  {text:'Registro de Bancos en CLP',etapa:'Bancos'},
+  {text:'Registro de Bancos en USD (si aplica)',etapa:'Bancos'},
+  {text:'Registro de Bancos en EUR (si aplica)',etapa:'Bancos'},
+  {text:'Dif. Cambio Bancos',etapa:'Bancos'},
+  {text:'Dif. Cambio Proveedores extranjero',etapa:'Proveedores'},
+  {text:'Facturas extranjeras ISP Cube',etapa:'Proveedores'},
+  {text:'Dif. cambio préstamos USD/EUR',etapa:'Proveedores'},
+  {text:'Rendiciones TDC CLP/USD',etapa:'Proveedores'},
+  {text:'Registro facturas por recibir',etapa:'Proveedores'},
+  {text:'Depreciación AF',etapa:'Activos'},
+  {text:'Cuadratura de cuentas contables',etapa:'Cierre'},
+  {text:'Cuadratura de empresas relacionadas',etapa:'Cierre'},
+  {text:'Solicitud carpetas DIN',etapa:'Cierre'},
+  {text:'Registro Prov. F29 (Ajuste IVA)',etapa:'Cierre'},
+];
 
-const BASE_DATA = {
-  'Mié 03':{title:'TELBROS — Día 1',empresas:[{nombre:'TELBROS',color:'telbros',vence:'Vence 05 Jun',meta:'08:00–17:00',tareas:[
-    {text:'Reverso de Facturas por Recibir',ini:'08:00',fin:'08:40'},
-    {text:'Registro de compras',ini:'08:40',fin:'09:20'},
-    {text:'Registro de ventas',ini:'09:20',fin:'10:00'},
-    {text:'Registro de Bancos en CLP',ini:'10:00',fin:'10:40'},
-    {text:'Dif. Cambio Bancos',ini:'10:40',fin:'11:20'},
-    {text:'Dif. Cambio Proveedores extranjero',ini:'11:20',fin:'12:00'},
-    {text:'Registro facturas por recibir',ini:'13:00',fin:'13:40'},
-    {text:'Centralización de remuneraciones',ini:'13:40',fin:'14:20'},
-    {text:'Boletas de honorarios',ini:'14:20',fin:'15:00'},
-    {text:'Facturas extranjeras ISP Cube',ini:'15:00',fin:'15:40'},
-    {text:'Dif. cambio préstamos USD/EUR',ini:'15:40',fin:'16:20'},
-    {text:'Rendiciones TDC CLP/USD',ini:'16:20',fin:'17:00'},
-  ]}]},
-  'Jue 04':{title:'TELBROS fin + INNOVAMAT',empresas:[
-    {nombre:'TELBROS',color:'telbros',vence:'Vence 05 Jun',meta:'08:00–15:00',tareas:[
-      {text:'Depreciación AF',ini:'08:00',fin:'09:00'},
-      {text:'Finiquitos por pagar',ini:'09:00',fin:'10:00'},
-      {text:'Cuadratura de cuentas contables',ini:'10:00',fin:'11:30'},
-      {text:'Cuadratura de empresas relacionadas',ini:'11:30',fin:'13:00'},
-      {text:'Solicitud carpetas DIN',ini:'13:00',fin:'13:30'},
-      {text:'Registro Prov. F29 (Ajuste IVA)',ini:'13:30',fin:'14:30'},
-      {text:'✅ Revisión final y entrega TELBROS',ini:'14:30',fin:'15:00'},
-    ]},
-    {nombre:'INNOVAMAT',color:'innovamat',vence:'Vence 05 Jun',meta:'15:00–17:00',tareas:[
-      {text:'Reverso de Facturas por Recibir',ini:'15:00',fin:'15:15'},
-      {text:'Registro de compras',ini:'15:15',fin:'15:25'},
-      {text:'Registro de ventas',ini:'15:25',fin:'15:35'},
-      {text:'Registro de Bancos en CLP',ini:'15:35',fin:'15:50'},
-      {text:'Centralización de remuneraciones',ini:'15:50',fin:'16:05'},
-      {text:'Boletas de honorarios',ini:'16:05',fin:'16:15'},
-      {text:'Depreciación AF',ini:'16:15',fin:'16:25'},
-      {text:'Cuadratura de cuentas contables',ini:'16:25',fin:'16:40'},
-      {text:'Registro Prov. F29 (Ajuste IVA)',ini:'16:40',fin:'16:50'},
-      {text:'✅ Revisión final y entrega INNOVAMAT',ini:'16:50',fin:'17:00'},
-    ]}
-  ]},
-  'Vie 05':{title:'FIBERUS — Día 1',empresas:[{nombre:'FIBERUS NETWORK SPA',color:'fiberus',vence:'Vence 10 Jun',meta:'08:00–14:00',tareas:[
-    {text:'Reverso de Facturas por Recibir',ini:'08:00',fin:'08:40'},
-    {text:'Registro de compras',ini:'08:40',fin:'09:20'},
-    {text:'Registro de ventas',ini:'09:20',fin:'10:00'},
-    {text:'Registro de Bancos en CLP',ini:'10:00',fin:'10:40'},
-    {text:'Registro de Bancos en USD (si aplica)',ini:'10:40',fin:'11:10'},
-    {text:'Registro de Bancos en EUR (si aplica)',ini:'11:10',fin:'11:40'},
-    {text:'Dif. Cambio Bancos',ini:'11:40',fin:'12:20'},
-    {text:'Dif. Cambio Proveedores extranjero',ini:'13:00',fin:'13:40'},
-    {text:'Registro facturas por recibir',ini:'13:40',fin:'14:00'},
-  ]}]},
-  'Lun 08':{title:'FIBERUS fin + TECH FOR BIZ',empresas:[
-    {nombre:'FIBERUS NETWORK SPA',color:'fiberus',vence:'Vence 10 Jun',meta:'08:00–11:00',tareas:[
-      {text:'Centralización de remuneraciones',ini:'08:00',fin:'08:40'},
-      {text:'Boletas de honorarios',ini:'08:40',fin:'09:10'},
-      {text:'Depreciación AF',ini:'09:10',fin:'09:40'},
-      {text:'Finiquitos por pagar',ini:'09:40',fin:'10:10'},
-      {text:'Cuadratura de cuentas contables',ini:'10:10',fin:'10:40'},
-      {text:'✅ DIN + F29 + Entrega FIBERUS',ini:'10:40',fin:'11:00'},
-    ]},
-    {nombre:'TECHNOLOGY FOR BUSINESS',color:'techbiz',vence:'Vence 10 Jun',meta:'11:00–17:00',tareas:[
-      {text:'Reverso de Facturas por Recibir',ini:'11:00',fin:'11:40'},
-      {text:'Registro de compras',ini:'11:40',fin:'12:20'},
-      {text:'Registro de ventas',ini:'13:00',fin:'13:40'},
-      {text:'Registro de Bancos en CLP',ini:'13:40',fin:'14:20'},
-      {text:'Dif. Cambio Bancos',ini:'14:20',fin:'15:00'},
-      {text:'Dif. Cambio Proveedores extranjero',ini:'15:00',fin:'15:40'},
-      {text:'Registro facturas por recibir',ini:'15:40',fin:'16:20'},
-      {text:'Centralización de remuneraciones',ini:'16:20',fin:'17:00'},
-    ]}
-  ]},
-  'Mar 09':{title:'TECH FOR BIZ — Cierre final',empresas:[{nombre:'TECHNOLOGY FOR BUSINESS',color:'techbiz',vence:'Vence 10 Jun',meta:'08:00–13:00',tareas:[
-    {text:'Boletas de honorarios',ini:'08:00',fin:'08:30'},
-    {text:'Facturas extranjeras ISP Cube',ini:'08:30',fin:'09:10'},
-    {text:'Dif. cambio préstamos USD/EUR',ini:'09:10',fin:'09:50'},
-    {text:'Depreciación AF',ini:'09:50',fin:'10:20'},
-    {text:'Finiquitos por pagar',ini:'10:20',fin:'10:50'},
-    {text:'Cuadratura de cuentas contables',ini:'10:50',fin:'11:30'},
-    {text:'Cuadratura de empresas relacionadas',ini:'11:30',fin:'12:10'},
-    {text:'Solicitud carpetas DIN',ini:'12:10',fin:'12:30'},
-    {text:'Registro Prov. F29 (Ajuste IVA)',ini:'12:30',fin:'12:50'},
-    {text:'✅ Revisión final y entrega',ini:'12:50',fin:'13:00'},
-  ]}]}
+let data={
+  empresas:['TELBROS','INNOVAMAT','FIBERUS NETWORK SPA','TECHNOLOGY FOR BUSINESS'],
+  state:{}, timers:{}, extraTareas:{},
+  solicitudes:[]
 };
+let curEmpresa='', curMes='', curPage='dashboard';
+let tickInterval=null;
 
-let state = {}, days = {};
-
-function loadStorage() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(SK)||'{}');
-    state = saved.state||{};
-    const extra = saved.extra||{};
-    days = JSON.parse(JSON.stringify(BASE_DATA));
-    for(const [day,data] of Object.entries(extra)){
-      if(!days[day]) days[day]={title:day,empresas:[]};
-      for(const emp of data.empresas){
-        const ex=days[day].empresas.find(e=>e.nombre===emp.nombre);
-        if(ex){ emp.tareas.forEach(t=>{ if(!ex.tareas.find(et=>et.text===t.text)) ex.tareas.push(t); }); }
-        else days[day].empresas.push(emp);
-      }
-    }
-  } catch(e){ days=JSON.parse(JSON.stringify(BASE_DATA)); }
+function loadStorage(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SK)||'{}');
+    if(s.empresas) data.empresas=s.empresas;
+    data.state=s.state||{};
+    data.timers=s.timers||{};
+    data.extraTareas=s.extraTareas||{};
+    data.solicitudes=s.solicitudes||[];
+    curEmpresa=s.curEmpresa||'';
+    curMes=s.curMes||'';
+  }catch(e){}
+}
+function saveStorage(){
+  try{localStorage.setItem(SK,JSON.stringify({...data,curEmpresa,curMes}));}catch(e){}
 }
 
-function saveStorage() {
-  const extra={};
-  for(const [day,data] of Object.entries(days)){
-    if(!BASE_DATA[day]){ extra[day]=data; continue; }
-    const extraEmps=[];
-    for(const emp of data.empresas){
-      const baseEmp=BASE_DATA[day].empresas.find(e=>e.nombre===emp.nombre);
-      if(!baseEmp){ extraEmps.push(emp); continue; }
-      const extraT=emp.tareas.filter(t=>!baseEmp.tareas.find(bt=>bt.text===t.text));
-      if(extraT.length) extraEmps.push({...emp,tareas:extraT});
-    }
-    if(extraEmps.length) extra[day]={title:data.title,empresas:extraEmps};
-  }
-  try{ localStorage.setItem(SK,JSON.stringify({state,extra})); }catch(e){}
+function tid(e,m,t){return `${e}||${m}||${t}`;}
+function getTareas(e,m){
+  const base=TAREAS_BASE.map(t=>({...t}));
+  const extra=(data.extraTareas[`${e}||${m}`]||[]).map(t=>({text:t,etapa:'Extra'}));
+  return [...base,...extra];
 }
 
-function taskId(day,emp,text){ return `${day}||${emp}||${text}`; }
-
-function colorClass(nombre){
-  const map={'TELBROS':'telbros','INNOVAMAT':'innovamat','FIBERUS NETWORK SPA':'fiberus','TECHNOLOGY FOR BUSINESS':'techbiz'};
-  return map[nombre]||'new';
+// ── Porcentaje por empresa+mes ──
+function getPct(empresa,mes){
+  const tareas=getTareas(empresa,mes);
+  if(!tareas.length) return 0;
+  const done=tareas.filter(t=>data.state[tid(empresa,mes,t.text)]).length;
+  return Math.round(done/tareas.length*100);
 }
 
-function toggleCard(cardId){
-  const card=document.getElementById(cardId);
-  const c=card.classList.toggle('collapsed');
-  state['collapsed-'+cardId]=c;
-  saveStorage();
-}
-
-function toggle(el){
-  const tid=decodeURIComponent(el.dataset.tid);
-  state[tid]=!state[tid];
-  saveStorage();
-  const parts=tid.split('||');
-  renderAll();
-  showDay('d-'+parts[0]);
-}
-
-function showDay(dayId){
-  document.querySelectorAll('.day-block').forEach(d=>d.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const block=document.getElementById(dayId);
-  if(block) block.classList.add('active');
-  const idx=Object.keys(days).indexOf(dayId.replace('d-',''));
-  const tabs=document.querySelectorAll('.tab');
-  if(tabs[idx]) tabs[idx].classList.add('active');
-}
-
-function updateGlobal(){
-  let total=0,done=0;
-  for(const [day,data] of Object.entries(days))
-    for(const emp of data.empresas){
-      total+=emp.tareas.length;
-      done+=emp.tareas.filter(t=>state[taskId(day,emp.nombre,t.text)]).length;
-    }
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('globalPct').textContent=pct+'%';
-  document.getElementById('globalBar').style.width=pct+'%';
-}
-
-function renderAll(){
-  // Tabs
-  const tc=document.getElementById('tabsContainer');
-  const activeDay=document.querySelector('.day-block.active')?.id?.replace('d-','')||Object.keys(days)[0];
-  tc.innerHTML='';
-  Object.keys(days).forEach((day,i)=>{
-    const btn=document.createElement('button');
-    btn.className='tab'+(day===activeDay?' active':'');
-    btn.textContent=day;
-    btn.onclick=()=>showDay('d-'+day);
-    tc.appendChild(btn);
+// ── Porcentaje global (todos los pares empresa+mes que tienen al menos 1 tarea done) ──
+function getGlobalPct(){
+  const claves=new Set();
+  data.empresas.forEach(e=>{
+    ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].forEach(m=>{
+      const tareas=getTareas(e,m);
+      const done=tareas.filter(t=>data.state[tid(e,m,t.text)]).length;
+      if(done>0) claves.add(`${e}||${m}`);
+    });
   });
+  if(!claves.size) return {pct:0,total:0,done:0};
+  let total=0,done=0;
+  for(const cl of claves){
+    const [e,m]=cl.split('||');
+    const tareas=getTareas(e,m);
+    total+=tareas.length;
+    done+=tareas.filter(t=>data.state[tid(e,m,t.text)]).length;
+  }
+  return {pct:total?Math.round(done/total*100):0,total,done};
+}
 
-  // Days
-  const dc=document.getElementById('daysContainer');
-  dc.innerHTML='';
-  Object.entries(days).forEach(([day,data],i)=>{
-    const block=document.createElement('div');
-    block.className='day-block'+(day===activeDay?' active':'');
-    block.id='d-'+day;
+function updateHeader(){
+  if(curEmpresa&&curMes){
+    const pct=getPct(curEmpresa,curMes);
+    document.getElementById('globalLabel').textContent=`${curMes} · ${curEmpresa.split(' ')[0]}`;
+    document.getElementById('globalPct').textContent=pct+'%';
+    document.getElementById('globalBar').style.width=pct+'%';
+  } else {
+    const g=getGlobalPct();
+    document.getElementById('globalLabel').textContent='Avance global';
+    document.getElementById('globalPct').textContent=g.pct+'%';
+    document.getElementById('globalBar').style.width=g.pct+'%';
+  }
+}
 
-    let html=`<div class="day-header"><div class="day-date">${day}</div><div class="day-title">${data.title}</div></div>`;
+// ── Páginas ──
+function showPage(page){
+  curPage=page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-tab')[['dashboard','cierres','solicitudes'].indexOf(page)].classList.add('active');
+  document.getElementById('selectorsBar').style.display=page==='cierres'?'flex':'none';
+  if(page==='dashboard') renderDashboard();
+  if(page==='cierres') renderCierres();
+  if(page==='solicitudes') renderSolicitudes();
+  updateHeader();
+}
 
-    data.empresas.forEach(emp=>{
-      const color=colorClass(emp.nombre);
-      const cardId=('card-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
-      const fillId=('fill-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
-      const textId=('text-'+day+'-'+emp.nombre).replace(/[\s/]/g,'-');
-      const pending=emp.tareas.filter(t=>!state[taskId(day,emp.nombre,t.text)]);
-      const done=emp.tareas.filter(t=>state[taskId(day,emp.nombre,t.text)]);
-      const total=emp.tareas.length;
-      const doneCount=done.length;
-      const pct=total?Math.round(doneCount/total*100):0;
-      const collapsed=state['collapsed-'+cardId]?'collapsed':'';
+// ── Dashboard ──
+function renderDashboard(){
+  const MESES_LIST=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const solPendientes=data.solicitudes.filter(s=>s.estado!=='resuelto').length;
+  const solAltas=data.solicitudes.filter(s=>s.urgencia==='alta'&&s.estado!=='resuelto').length;
 
-      html+=`<div class="empresa-card ${collapsed}" id="${cardId}">
-        <div class="empresa-head c-${color}" onclick="toggleCard('${cardId}')">
-          <div><div class="empresa-name n-${color}">${emp.nombre}</div><div class="empresa-meta">${emp.meta||''} · ${doneCount}/${total}</div></div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            ${emp.vence?`<span class="empresa-badge b-${color}">${emp.vence}</span>`:''}
-            <span class="accordion-arrow">▼</span>
-          </div>
+  // Fecha actual
+  const hoy=new Date();
+  const fechaStr=hoy.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const fechaCap=fechaStr.charAt(0).toUpperCase()+fechaStr.slice(1);
+
+  // Calcular % global SOLO de empresas con alguna tarea iniciada (pendiente = menos de 100%)
+  let totalGlobal=0, doneGlobal=0;
+  const pendientesPorEmpresa={}; // empresa -> [meses pendientes]
+  const mesActualMes=MESES_LIST[hoy.getMonth()]; // mes actual real
+
+  data.empresas.forEach(e=>{
+    MESES_LIST.forEach(m=>{
+      const tareas=getTareas(e,m);
+      const done=tareas.filter(t=>data.state[tid(e,m,t.text)]).length;
+      if(done>0||m===mesActualMes){ // incluir mes actual aunque no haya empezado
+        totalGlobal+=tareas.length;
+        doneGlobal+=done;
+        if(done<tareas.length){
+          if(!pendientesPorEmpresa[e]) pendientesPorEmpresa[e]=[];
+          pendientesPorEmpresa[e].push({mes:m,done,total:tareas.length,pct:Math.round(done/tareas.length*100)});
+        }
+      }
+    });
+  });
+  const pctGlobal=totalGlobal?Math.round(doneGlobal/totalGlobal*100):0;
+
+  // Mes activo trabajando
+  const mesActualPct=curEmpresa&&curMes?getPct(curEmpresa,curMes):null;
+  const mesActualTareas=curEmpresa&&curMes?getTareas(curEmpresa,curMes):[];
+  const mesActualDone=curEmpresa&&curMes?mesActualTareas.filter(t=>data.state[tid(curEmpresa,curMes,t.text)]).length:0;
+
+  let html=`<div class="dash-grid">`;
+
+  // Fecha
+  html+=`<div class="dash-card full" style="padding:12px 16px;background:rgba(126,184,232,.06);border-color:rgba(126,184,232,.2);">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:2px;">Hoy</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);">${fechaCap}</div>
+  </div>`;
+
+  // % Global total
+  html+=`<div class="dash-card full" style="background:linear-gradient(135deg,#1a1a2e,#1a1a22);">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Avance total de cierres</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--accent);">${pctGlobal}%</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">${doneGlobal} de ${totalGlobal} tareas completadas</div>
+      </div>
+      <div style="width:72px;height:72px;position:relative;flex-shrink:0;">
+        <svg viewBox="0 0 36 36" style="transform:rotate(-90deg);width:72px;height:72px;">
+          <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="3"
+            stroke-dasharray="${(pctGlobal*0.942).toFixed(1)} 94.2" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);">${pctGlobal}%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:var(--border);border-radius:100px;height:4px;overflow:hidden;">
+      <div style="height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;width:${pctGlobal}%;transition:width .5s;"></div>
+    </div>
+  </div>`;
+
+  // Trabajando ahora
+  if(curEmpresa&&curMes){
+    const barColor=mesActualPct<30?'var(--red)':mesActualPct<70?'var(--accent)':'var(--green)';
+    html+=`<div class="dash-card full" style="border-color:rgba(232,201,126,.3);cursor:pointer;" onclick="showPage('cierres')">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">📌 Trabajando ahora</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-weight:700;font-size:14px;">${curEmpresa}</div>
+          <div style="font-size:12px;color:var(--muted);">Cierre ${curMes}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">${mesActualDone} de ${mesActualTareas.length} tareas</div>
         </div>
-        <div class="task-list" id="list-${cardId}">`;
+        <div style="font-size:30px;font-weight:700;color:${barColor};">${mesActualPct}%</div>
+      </div>
+      <div style="margin-top:10px;background:var(--border);border-radius:100px;height:5px;overflow:hidden;">
+        <div style="height:100%;background:${barColor};border-radius:100px;width:${mesActualPct}%;transition:width .5s;"></div>
+      </div>
+    </div>`;
+  }
 
-      pending.forEach(t=>{
-        const tid=taskId(day,emp.nombre,t.text);
-        html+=`<div class="task-item" data-tid="${encodeURIComponent(tid)}" onclick="toggle(this)">
-          <div class="check"></div>
-          <div class="task-info"><div class="task-text">${t.text}</div>
-          ${t.ini&&t.fin?`<div class="task-time"><span class="time-chip">${t.ini} – ${t.fin}</span></div>`:''}</div>
+  // Pendientes por empresa
+  const empresasPendientes=Object.entries(pendientesPorEmpresa);
+  if(empresasPendientes.length){
+    html+=`<div class="dash-card full">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:12px;">⚠️ Cierres pendientes</div>`;
+    empresasPendientes.forEach(([empresa,meses])=>{
+      meses.forEach(m=>{
+        const color=m.pct===0?'var(--muted)':m.pct<50?'var(--red)':m.pct<100?'var(--accent)':'var(--green)';
+        const esActual=empresa===curEmpresa&&m.mes===curMes;
+        html+=`<div class="emp-row" onclick="irACierre('${empresa}','${m.mes}')" style="cursor:pointer;${esActual?'background:rgba(232,201,126,.05);border-radius:8px;padding:4px 6px;margin:-4px -6px;':''}">
+          <div class="emp-name">
+            <div style="font-weight:600;font-size:12px;">${empresa.length>20?empresa.substring(0,20)+'…':empresa}${esActual?' 📌':''}</div>
+            <div style="font-size:10px;color:var(--muted);">Cierre ${m.mes} · ${m.done}/${m.total} tareas</div>
+          </div>
+          <div class="mini-bar"><div class="mini-fill" style="width:${m.pct}%;background:${color};"></div></div>
+          <div class="emp-pct-txt" style="color:${color};">${m.pct}%</div>
         </div>`;
       });
-
-      if(done.length){
-        html+=`<div class="section-sep">✓ Completadas</div>`;
-        done.forEach(t=>{
-          const tid=taskId(day,emp.nombre,t.text);
-          html+=`<div class="task-item done" data-tid="${encodeURIComponent(tid)}" onclick="toggle(this)">
-            <div class="check"></div>
-            <div class="task-info"><div class="task-text">${t.text}</div>
-            ${t.ini&&t.fin?`<div class="task-time"><span class="time-chip">${t.ini} – ${t.fin}</span></div>`:''}</div>
-          </div>`;
-        });
-      }
-
-      html+=`</div>
-        <div class="empresa-foot">
-          <div class="foot-bar"><div class="foot-fill" id="${fillId}" style="background:${color==='new'?'var(--green)':'var(--'+color+')'};width:${pct}%"></div></div>
-          <div class="foot-text" id="${textId}">${doneCount} / ${total}</div>
-        </div></div>`;
     });
+    html+=`</div>`;
+  } else {
+    html+=`<div class="dash-card full" style="text-align:center;padding:20px;">
+      <div style="font-size:28px;margin-bottom:6px;">🎉</div>
+      <div style="font-weight:600;color:var(--green);margin-bottom:4px;">¡Todo al día!</div>
+      <div style="font-size:12px;color:var(--muted);">No hay cierres pendientes.</div>
+    </div>`;
+  }
 
-    block.innerHTML=html;
-    dc.appendChild(block);
+  // Solicitudes
+  html+=`<div class="dash-card" style="cursor:pointer;" onclick="showPage('solicitudes')">
+    <div class="dash-val" style="color:${solAltas>0?'var(--red)':solPendientes>0?'var(--accent)':'var(--muted)'}">${solPendientes}</div>
+    <div class="dash-label">Solicitudes pendientes</div>
+    ${solAltas>0?`<div style="font-size:11px;color:var(--red);margin-top:4px;">${solAltas} urgentes</div>`:'<div style="font-size:11px;color:var(--muted);margin-top:4px;">Toca para ver</div>'}
+  </div>
+  <div class="dash-card" style="cursor:pointer;" onclick="showPage('cierres')">
+    <div class="dash-val" style="color:var(--accent2);">→</div>
+    <div class="dash-label">Ir a Cierres</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Continuar trabajo</div>
+  </div>`;
+
+  html+=`</div>`;
+  document.getElementById('dashGrid').innerHTML=html;
+}
+
+function irACierre(empresa,mes){
+  curEmpresa=empresa;curMes=mes;
+  saveStorage();
+  showPage('cierres');
+  populateEmpresas();
+}
+
+// ── Cierres ──
+function renderCierres(){
+  const view=document.getElementById('cierresView');
+  if(!curEmpresa||!curMes){
+    view.innerHTML=`<div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">Selecciona empresa y mes</div>
+      <div class="empty-sub">Elige arriba qué empresa y qué mes quieres cerrar.</div>
+    </div>`;
+    return;
+  }
+  const tareas=getTareas(curEmpresa,curMes);
+  const pending=tareas.filter(t=>!data.state[tid(curEmpresa,curMes,t.text)]);
+  const done=tareas.filter(t=>!!data.state[tid(curEmpresa,curMes,t.text)]);
+  const pct=tareas.length?Math.round(done.length/tareas.length*100):0;
+
+  const etapas={};
+  pending.forEach(t=>{
+    if(!etapas[t.etapa]) etapas[t.etapa]=[];
+    etapas[t.etapa].push(t);
   });
 
-  updateGlobal();
+  let html=`<div class="context-card">
+    <div>
+      <div class="context-empresa">${curEmpresa}</div>
+      <div class="context-mes">Cierre ${curMes} 2026</div>
+    </div>
+    <div>
+      <div class="context-pct">${pct}%</div>
+      <div class="context-sub">${done.length}/${tareas.length} tareas</div>
+    </div>
+  </div>`;
+
+  if(pending.length){
+    html+=`<div class="tasks-card">`;
+    let first=true;
+    for(const [etapa,ts] of Object.entries(etapas)){
+      html+=first
+        ?`<div style="padding-top:8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">${etapa}</div>`
+        :`<div class="section-label">${etapa}</div>`;
+      first=false;
+      ts.forEach(t=>{ html+=renderTaskEl(curEmpresa,curMes,t.text,false); });
+    }
+    html+=`</div>`;
+  }
+
+  if(done.length){
+    html+=`<div class="tasks-card"><div style="padding-top:8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">✓ Completadas</div>`;
+    done.forEach(t=>{ html+=renderTaskEl(curEmpresa,curMes,t.text,true); });
+    html+=`</div>`;
+  }
+
+  view.innerHTML=html;
+  for(const id of Object.keys(data.timers)) if(data.timers[id].running) ensureTick();
 }
 
-// ── Excel Upload ──
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.remove('drag');
-  const file=e.dataTransfer.files[0];
-  if(file) processExcel(file);
+function renderTaskEl(empresa,mes,text,isDone){
+  const id=tid(empresa,mes,text);
+  const elapsed=getElapsed(id);
+  const running=data.timers[id]&&data.timers[id].running;
+  const dispTime=elapsed>0?fmtMs(elapsed):'00:00';
+  const dispClass=running?'running':elapsed>0?'finished':'';
+  const enc=id.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return `<div class="task-item${isDone?' done':''}" data-tid="${id}">
+    <div class="task-left" onclick="toggleTask('${enc}')">
+      <div class="check"></div>
+      <div class="task-info"><div class="task-text">${text}</div></div>
+    </div>
+    <div class="timer-col">
+      <div class="timer-display ${dispClass}">${dispTime}</div>
+      <button class="timer-btn ${running?'stop':'start'}" onclick="event.stopPropagation();toggleTimerById('${enc}')">${running?'⏹':'▶'}</button>
+    </div>
+  </div>`;
 }
 
-function handleFile(e){
-  const file=e.target.files[0];
-  if(file) processExcel(file);
-  e.target.value='';
+function toggleTask(id){
+  if(data.timers[id]&&data.timers[id].running){
+    data.timers[id].elapsed+=Date.now()-data.timers[id].startTs;
+    data.timers[id].running=false;
+  }
+  data.state[id]=!data.state[id];
+  saveStorage();
+  renderCierres();
+  updateHeader();
 }
 
-function showBanner(msg, isError=false){
+// ── Cronómetro ──
+function fmtMs(ms){const s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60);return h>0?`${h}h${String(m%60).padStart(2,'0')}m`:`${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
+function fmtMsLong(ms){const m=Math.round(ms/60000),h=Math.floor(m/60);return h>0?`${h}h ${m%60}min`:`${m} min`;}
+function getElapsed(id){const t=data.timers[id];if(!t)return 0;return t.elapsed+(t.running?(Date.now()-t.startTs):0);}
+function toggleTimerById(id){
+  if(!data.timers[id]) data.timers[id]={elapsed:0,startTs:0,running:false};
+  const t=data.timers[id];
+  if(t.running){t.elapsed+=Date.now()-t.startTs;t.running=false;}
+  else{t.startTs=Date.now();t.running=true;}
+  saveStorage();ensureTick();updateTimerUI(id);
+}
+function ensureTick(){
+  if(tickInterval) return;
+  tickInterval=setInterval(()=>{
+    let any=false;
+    for(const id of Object.keys(data.timers)){if(data.timers[id].running){any=true;updateTimerUI(id);}}
+    if(!any){clearInterval(tickInterval);tickInterval=null;}
+  },1000);
+}
+function updateTimerUI(id){
+  const el=document.querySelector(`[data-tid="${id}"]`);
+  if(!el)return;
+  const disp=el.querySelector('.timer-display');
+  const btn=el.querySelector('.timer-btn');
+  if(!disp||!btn)return;
+  const elapsed=getElapsed(id);
+  const running=data.timers[id]&&data.timers[id].running;
+  disp.textContent=elapsed>0?fmtMs(elapsed):'00:00';
+  disp.className='timer-display'+(running?' running':elapsed>0?' finished':'');
+  btn.textContent=running?'⏹':'▶';
+  btn.className='timer-btn '+(running?'stop':'start');
+}
+
+// ── Solicitudes ──
+function agregarSolicitud(){
+  const titulo=document.getElementById('solTitulo').value.trim();
+  if(!titulo){showBanner('Escribe una descripción.',true);return;}
+  data.solicitudes.unshift({
+    id:Date.now(),
+    titulo,
+    tipo:document.getElementById('solTipo').value,
+    urgencia:document.getElementById('solUrgencia').value,
+    empresa:document.getElementById('solEmpresaSol').value.trim(),
+    estado:'pendiente',
+    fecha:new Date().toLocaleDateString('es-CL')
+  });
+  document.getElementById('solTitulo').value='';
+  document.getElementById('solEmpresaSol').value='';
+  saveStorage();
+  renderSolicitudes();
+  updateHeader();
+}
+
+function cambiarEstadoSol(id,estado){
+  const sol=data.solicitudes.find(s=>s.id===id);
+  if(sol) sol.estado=estado;
+  saveStorage();renderSolicitudes();updateHeader();
+}
+function eliminarSol(id){
+  data.solicitudes=data.solicitudes.filter(s=>s.id!==id);
+  saveStorage();renderSolicitudes();updateHeader();
+}
+
+function renderSolicitudes(){
+  const view=document.getElementById('solicitudesView');
+  if(!data.solicitudes.length){
+    view.innerHTML=`<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-title">Sin solicitudes</div><div class="empty-sub">Cuando llegue algo inesperado, regístralo aquí.</div></div>`;
+    return;
+  }
+
+  const pendientes=data.solicitudes.filter(s=>s.estado!=='resuelto');
+  const resueltas=data.solicitudes.filter(s=>s.estado==='resuelto');
+
+  let html='';
+  if(pendientes.length){
+    html+=`<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Pendientes (${pendientes.length})</div>`;
+    pendientes.forEach(s=>{ html+=renderSolItem(s); });
+  }
+  if(resueltas.length){
+    html+=`<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;">✓ Resueltas</div>`;
+    resueltas.forEach(s=>{ html+=renderSolItem(s); });
+  }
+  view.innerHTML=html;
+}
+
+function renderSolItem(s){
+  const badgeTipo={cliente:'badge-cliente',jefatura:'badge-jefatura',correccion:'badge-correccion',otro:'badge-otro'}[s.tipo]||'badge-otro';
+  const labelTipo={cliente:'Cliente',jefatura:'Jefatura',correccion:'Corrección',otro:'Otro'}[s.tipo]||s.tipo;
+  const badgeUrg={alta:'badge-alta',media:'badge-media',baja:'badge-baja'}[s.urgencia]||'badge-baja';
+  const labelUrg={alta:'🔴 Alta',media:'🟡 Media',baja:'🟢 Baja'}[s.urgencia]||s.urgencia;
+  const isResuelto=s.estado==='resuelto';
+  return `<div class="sol-item${isResuelto?' sol-resuelto':''}">
+    <div class="sol-header">
+      <div class="sol-titulo">${s.titulo}</div>
+      <div class="sol-badges">
+        <span class="badge ${badgeUrg}">${labelUrg}</span>
+        <span class="badge ${badgeTipo}">${labelTipo}</span>
+      </div>
+    </div>
+    ${s.empresa?`<div class="sol-desc">Empresa: ${s.empresa} · ${s.fecha}</div>`:`<div class="sol-desc">${s.fecha}</div>`}
+    <div class="sol-footer">
+      <div class="sol-estado">${{pendiente:'⏳ Pendiente','en proceso':'🔄 En proceso',resuelto:'✅ Resuelto'}[s.estado]||s.estado}</div>
+      <div class="sol-actions">
+        ${!isResuelto?`
+          ${s.estado!=='en proceso'?`<button class="sol-btn proceso" onclick="cambiarEstadoSol(${s.id},'en proceso')">En proceso</button>`:''}
+          <button class="sol-btn resolver" onclick="cambiarEstadoSol(${s.id},'resuelto')">Resolver</button>
+        `:''}
+        <button class="sol-btn eliminar" onclick="eliminarSol(${s.id})">✕</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Selectores ──
+function populateEmpresas(){
+  const sel=document.getElementById('selEmpresa');
+  sel.innerHTML='<option value="">— Selecciona —</option>';
+  data.empresas.forEach(e=>{
+    const opt=document.createElement('option');
+    opt.value=e;opt.textContent=e;
+    if(e===curEmpresa) opt.selected=true;
+    sel.appendChild(opt);
+  });
+  if(curMes) document.getElementById('selMes').value=curMes;
+}
+
+function onSelectChange(){
+  curEmpresa=document.getElementById('selEmpresa').value;
+  curMes=document.getElementById('selMes').value;
+  saveStorage();
+  renderCierres();
+  updateHeader();
+}
+
+function agregarEmpresa(){
+  const n=prompt('Nombre de la nueva empresa:');
+  if(!n||!n.trim()) return;
+  const nombre=n.trim().toUpperCase();
+  if(!data.empresas.includes(nombre)) data.empresas.push(nombre);
+  saveStorage();populateEmpresas();
+  document.getElementById('selEmpresa').value=nombre;
+  curEmpresa=nombre;saveStorage();renderCierres();updateHeader();
+}
+
+// ── Excel ──
+function handleFile(e){const f=e.target.files[0];if(f) processExcel(f);e.target.value='';}
+function showBanner(msg,isError=false){
   const b=document.getElementById(isError?'errorBanner':'successBanner');
   const b2=document.getElementById(isError?'successBanner':'errorBanner');
-  b2.style.display='none';
-  b.textContent=msg;
-  b.style.display='block';
-  setTimeout(()=>b.style.display='none', 6000);
+  b2.style.display='none';b.textContent=msg;b.style.display='block';
+  setTimeout(()=>b.style.display='none',5000);
 }
-
 function processExcel(file){
   const reader=new FileReader();
   reader.onload=function(e){
@@ -401,54 +708,65 @@ function processExcel(file){
       const wb=XLSX.read(e.target.result,{type:'binary'});
       const ws=wb.Sheets[wb.SheetNames[0]];
       const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-
-      // Find header row
       let startRow=-1;
       for(let i=0;i<rows.length;i++){
         const r=rows[i].map(c=>String(c).toUpperCase().trim());
         if(r.some(c=>c.includes('EMPRESA'))&&r.some(c=>c.includes('TAREA'))){startRow=i+1;break;}
       }
-      if(startRow<0){showBanner('No se encontró la cabecera EMPRESA y TAREA en el archivo.',true);return;}
-
+      if(startRow<0){showBanner('No se encontró cabecera.',true);return;}
       const header=rows[startRow-1].map(c=>String(c).toUpperCase().trim());
-      const iEmpresa=header.findIndex(h=>h.includes('EMPRESA'));
-      const iDia=header.findIndex(h=>h.includes('D')&&(h.includes('A')||h.includes('Í')||h.includes('I')));
-      const iTarea=header.findIndex(h=>h.includes('TAREA'));
-      const iIni=header.findIndex(h=>h.includes('INICIO')||h.includes('INI'));
-      const iFin=header.findIndex(h=>h.includes('FIN'));
-
+      const iE=header.findIndex(h=>h.includes('EMPRESA'));
+      const iM=header.findIndex(h=>h.includes('MES'));
+      const iT=header.findIndex(h=>h.includes('TAREA'));
       let added=0,skipped=0;
       for(let i=startRow;i<rows.length;i++){
         const row=rows[i];
-        const empresa=String(row[iEmpresa]||'').trim();
-        const dia=String(row[iDia]||'').trim();
-        const tarea=String(row[iTarea]||'').trim();
-        if(!empresa||!dia||!tarea){if(empresa||dia||tarea)skipped++;continue;}
-        const ini=iIni>=0?String(row[iIni]||'').trim():'';
-        const fin=iFin>=0?String(row[iFin]||'').trim():'';
-
-        if(!days[dia]) days[dia]={title:dia,empresas:[]};
-        let emp=days[dia].empresas.find(e=>e.nombre===empresa);
-        if(!emp){
-          emp={nombre:empresa,color:colorClass(empresa),vence:'',meta:'',tareas:[]};
-          days[dia].empresas.push(emp);
-        }
-        if(!emp.tareas.find(t=>t.text===tarea)){emp.tareas.push({text:tarea,ini,fin});added++;}
+        const empresa=String(row[iE]||'').trim().toUpperCase();
+        const mes=String(row[iM]||'').trim();
+        const tarea=String(row[iT]||'').trim();
+        if(!empresa||!mes||!tarea){if(empresa||mes||tarea)skipped++;continue;}
+        if(!data.empresas.includes(empresa)) data.empresas.push(empresa);
+        const key=`${empresa}||${mes}`;
+        if(!data.extraTareas[key]) data.extraTareas[key]=[];
+        if(!TAREAS_BASE.find(t=>t.text===tarea)&&!data.extraTareas[key].includes(tarea)){data.extraTareas[key].push(tarea);added++;}
         else skipped++;
       }
-
-      saveStorage();
-      renderAll();
+      saveStorage();populateEmpresas();renderCierres();
       showBanner(`✅ ${added} tareas agregadas${skipped?` · ${skipped} omitidas`:''}.`);
-    }catch(err){
-      showBanner('Error al leer el archivo. Usa la plantilla provista.',true);
-    }
+    }catch(err){showBanner('Error al leer el archivo.',true);}
   };
   reader.readAsBinaryString(file);
 }
 
+function exportarExcel(){
+  const rows=[['EMPRESA','MES','TAREA','TIEMPO REAL','ESTADO']];
+  const claves=new Set();
+  Object.keys(data.state).forEach(k=>{const p=k.split('||');claves.add(`${p[0]}||${p[1]}`);});
+  Object.keys(data.timers).forEach(k=>{const p=k.split('||');claves.add(`${p[0]}||${p[1]}`);});
+  if(curEmpresa&&curMes) claves.add(`${curEmpresa}||${curMes}`);
+  for(const cl of claves){
+    const [e,m]=cl.split('||');
+    getTareas(e,m).forEach(t=>{
+      const id=tid(e,m,t.text);
+      const elapsed=getElapsed(id);
+      const isDone=!!data.state[id];
+      if(elapsed>0||isDone) rows.push([e,m,t.text,elapsed>0?fmtMsLong(elapsed):'-',isDone?'Completado':'Pendiente']);
+    });
+  }
+  if(rows.length===1){showBanner('No hay datos para exportar.',true);return;}
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols']=[{wch:25},{wch:12},{wch:40},{wch:12},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,'Tiempos',ws);
+  XLSX.writeFile(wb,`tiempos-${new Date().toLocaleDateString('es-CL').replace(/\//g,'-')}.xlsx`);
+  showBanner('✅ Excel exportado.');
+}
+
+// ── Init ──
 loadStorage();
-renderAll();
+populateEmpresas();
+renderDashboard();
+updateHeader();
 </script>
 </body>
 </html>
